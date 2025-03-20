@@ -1,9 +1,9 @@
 import React from "react";
 
-const InputBoxComponent = ()=>{
+const InputBoxComponent = ({InputType,InputName})=>{
 
     return(
-        <input type="text" name="sample"/>
+        <input className="border-2 border-black w-auto m-auto" type={InputType} name={InputName}/>
     )
 }
 
