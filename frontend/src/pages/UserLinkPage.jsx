@@ -1,8 +1,8 @@
 import React from "react";
 import UserLinksLayout from "../layouts/UserLinksLayout";
 
-const UserLinksPage = () =>{
+const UserLinkPage = () =>{
     return (<UserLinksLayout UserName={"Karthik"}/>)
 }
 
-export default UserLinksPage;
+export default UserLinkPage;
