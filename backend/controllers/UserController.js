@@ -1,7 +1,7 @@
 import { userModel } from "../modals/UserModal.js";
 import jwt from 'jsonwebtoken';
 
-const SignUp = async (req, res) => {
+const SignUp = async (req, res,next) => {
     try {
         const {name,email,password} = req.body;
 
@@ -20,13 +20,15 @@ const SignUp = async (req, res) => {
             httpOnly: false,
           })
 
-        return res.json({ status: "success", data: result })
+        res.json({ status: "success", data: result });
+
+        next();
     } catch (error) {
         return res.status(500).json({ status: "error", message: error.message });
     }
 }
 
-const SignIn = async (req, res) => {
+const SignIn = async (req, res,next) => {
     try {
         const {email,password} = req.body;
 
@@ -48,7 +50,9 @@ const SignIn = async (req, res) => {
                 httpOnly: false,
             })
 
-            return res.json({ status: "success", data: result })
+            res.json({ status: "success", data: result });
+
+            next();
         }else{
             return res.status(404).json({ status: "error", message: "Enter Valid Password" });
         }
