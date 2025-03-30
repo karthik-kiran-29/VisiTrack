@@ -3,8 +3,9 @@ import { connectDB } from './config/connectDB.js';
 const app = express();
 import dotenv from 'dotenv';
 import { UserRoute } from './routes/UserRoute.js';
+import cookieParser from 'cookie-parser';
 app.use(express.json());
-
+app.use(cookieParser());
 dotenv.config()
 
 connectDB();

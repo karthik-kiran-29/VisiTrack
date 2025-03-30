@@ -1,12 +1,9 @@
 import { userModel } from "../modals/UserModal.js";
+import jwt from 'jsonwebtoken';
 
-const AddUser = async (req, res) => {
+const SignUp = async (req, res) => {
     try {
-        const name = req.body.name;
-        const email = req.body.email;
-        const password = req.body.password;
-
-        console.log(req.body)
+        const {name,email,password} = req.body;
 
         const document = {
             name: name,
@@ -14,12 +11,50 @@ const AddUser = async (req, res) => {
             password: password
         }
 
-        const result = await userModel.insertOne(document);
+        const result = await userModel.create(document);
 
-        res.json({ status: "success", data: result })
+        const token = jwt.sign(result._id.toString(), process.env.TOKEN_KEY);
+
+        res.cookie('token',token, {
+            withCredentials: true,
+            httpOnly: false,
+          })
+
+        return res.json({ status: "success", data: result })
     } catch (error) {
-        res.status(500).json({ status: "error", message: error.message });
+        return res.status(500).json({ status: "error", message: error.message });
     }
 }
 
-export { AddUser };
+const SignIn = async (req, res) => {
+    try {
+        const {email,password} = req.body;
+
+        const document = {
+            email: email,
+        }
+
+        const result = await userModel.findOne(document);
+        
+        if(!result){
+            return res.status(500).json({ status: "error", message: "User Does not Exist" });
+        }
+
+        if(result.password === password){
+            const token = jwt.sign(result._id.toString(), process.env.TOKEN_KEY);
+
+            res.cookie('token',token, {
+                withCredentials: true,
+                httpOnly: false,
+            })
+
+            return res.json({ status: "success", data: result })
+        }else{
+            return res.status(404).json({ status: "error", message: "Enter Valid Password" });
+        }
+    } catch (error) {
+        return res.status(500).json({ status: "error", message: error.message });
+    }
+}
+
+export { SignUp,SignIn };
