@@ -44,3 +44,4 @@ backend/*.ntvs*
 backend/*.njsproj
 backend/*.sln
 backend/*.sw?
+backend/*.env
