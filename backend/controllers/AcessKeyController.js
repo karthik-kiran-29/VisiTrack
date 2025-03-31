@@ -7,10 +7,10 @@ const postAcessKey = async (req,res) =>{
         return res.status(401).json({status:false,message:"User Not Found"});
     }
     try {
-        const key = await AcessKeyModal.insertOne({userid:id});
+        const key = await AcessKeyModal.create({userid:id,count:0});
         return res.json({status:true,key});
     } catch (error) {
-        return res.status(500).json({status:false,message:"Request Not Processed"});
+        return res.status(500).json({status:false,message:error.message});
     }
 
 }
