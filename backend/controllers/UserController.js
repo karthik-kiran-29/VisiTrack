@@ -1,14 +1,19 @@
 import { userModel } from "../modals/UserModal.js";
 import jwt from 'jsonwebtoken';
+import bcrypt from 'bcryptjs';
 
 const SignUp = async (req, res) => {
     try {
         const {name,email,password} = req.body;
 
+        const salt = await bcrypt.genSalt(10);
+        const hash = await bcrypt.hash(password, salt);
+// Store hash in your password DB
+
         const document = {
             name: name,
             email: email,
-            password: password
+            password: hash
         }
 
         const result = await userModel.create(document);
@@ -41,7 +46,7 @@ const SignIn = async (req, res) => {
             return res.status(500).json({ status: false, message: "User Does not Exist" });
         }
 
-        if(result.password === password){
+        if(await bcrypt.compare(password, result.password)){
             const token = jwt.sign(result._id.toString(), process.env.TOKEN_KEY);
 
             res.cookie('token',token, {
