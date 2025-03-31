@@ -7,8 +7,8 @@ const postAcessKey = async (req,res) =>{
         return res.status(401).json({status:false,message:"User Not Found"});
     }
     try {
-        const key = await AcessKeyModal.create({userid:id,count:0});
-        return res.json({status:true,key});
+        const result = await AcessKeyModal.create({userid:id,count:0});
+        return res.json({status:true,result});
     } catch (error) {
         return res.status(500).json({status:false,message:error.message});
     }
@@ -23,8 +23,11 @@ const getAcessKey = async (req,res)=>{
     }
 
     try {
-        const keys = await AcessKeyModal.find({userid:id});
-        return res.json({status:true,keys});
+        const result = await AcessKeyModal.find({userid:id});
+        if(!result){
+            return res.status(401).json({status:false,message:"Key Not Found"});
+        }
+        return res.json({status:true,result});
     } catch (error) {
         return res.status(500).json({status:false,message:"Request Not Processed"});
     }
@@ -39,7 +42,8 @@ const deleteAcessKey = async (req,res)=>{
 
     try {
         const keys = await AcessKeyModal.deleteOne({_id:keyid});
-        return res.json({status:true,keys});
+        const result = (keys.deletedCount==1)?(keys.deletedCount):"Api Not Found";
+        return res.json({status:true,result});
     } catch (error) {
         return res.status(500).json({status:false,message:"Request Not Processed"});
     }

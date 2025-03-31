@@ -1,7 +1,7 @@
 import { userModel } from "../modals/UserModal.js";
 import jwt from 'jsonwebtoken';
 
-const SignUp = async (req, res,next) => {
+const SignUp = async (req, res) => {
     try {
         const {name,email,password} = req.body;
 
@@ -20,15 +20,15 @@ const SignUp = async (req, res,next) => {
             httpOnly: false,
           })
 
-        res.json({ status: "success", data: result });
+        res.json({ status: true, result });
 
         next();
     } catch (error) {
-        return res.status(500).json({ status: "error", message: error.message });
+        return res.status(500).json({ status: false, message: error.message });
     }
 }
 
-const SignIn = async (req, res,next) => {
+const SignIn = async (req, res) => {
     try {
         const {email,password} = req.body;
 
@@ -39,7 +39,7 @@ const SignIn = async (req, res,next) => {
         const result = await userModel.findOne(document);
         
         if(!result){
-            return res.status(500).json({ status: "error", message: "User Does not Exist" });
+            return res.status(500).json({ status: false, message: "User Does not Exist" });
         }
 
         if(result.password === password){
@@ -50,14 +50,12 @@ const SignIn = async (req, res,next) => {
                 httpOnly: false,
             })
 
-            res.json({ status: "success", data: result });
-
-            next();
+            res.json({ status: true, result });
         }else{
-            return res.status(404).json({ status: "error", message: "Enter Valid Password" });
+            return res.status(404).json({ status: false, message: "Enter Valid Password" });
         }
     } catch (error) {
-        return res.status(500).json({ status: "error", message: error.message });
+        return res.status(500).json({ status: false, message: error.message });
     }
 }
 
