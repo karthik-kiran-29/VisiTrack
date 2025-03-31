@@ -20,9 +20,8 @@ const SignUp = async (req, res) => {
             httpOnly: false,
           })
 
-        res.json({ status: true, result });
+        return res.json({ status: true, result });
 
-        next();
     } catch (error) {
         return res.status(500).json({ status: false, message: error.message });
     }
@@ -50,7 +49,7 @@ const SignIn = async (req, res) => {
                 httpOnly: false,
             })
 
-            res.json({ status: true, result });
+            return res.json({ status: true, result });
         }else{
             return res.status(404).json({ status: false, message: "Enter Valid Password" });
         }
