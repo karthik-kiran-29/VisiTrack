@@ -13,7 +13,7 @@ const AuthMiddleware = async (req, res, next) => {
         const user = await userModel.findById(data);
         
         if (user) {
-            req.user = user; // Attach user to request object
+            req.user = {id:user._id}; // Attach user to request object
             next(); // Proceed to the next middleware
         } else {
             return res.status(401).json({ status: false, message: "User not found" });
