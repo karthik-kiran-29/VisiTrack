@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useContext} from "react";
 import { useNavigate,Link } from "react-router";
 
 const Header = () => {
