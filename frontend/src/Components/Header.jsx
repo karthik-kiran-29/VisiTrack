@@ -1,8 +1,9 @@
 import React,{useContext} from "react";
 import { useNavigate,Link } from "react-router";
+import { useAuth } from "../Context/AuthProvider";
 
 const Header = () => {
-    const { user, logout } = useContext(AuthContext);
+    const {user} = useAuth();
     const navigate = useNavigate();
     
     const handleLogout = () => {
