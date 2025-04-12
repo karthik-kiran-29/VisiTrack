@@ -1,7 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import InputBoxComponent from "../Components/InputBoxComponent";
 
 const LoginLayout = () => {
+    const [form,setForm] = useState({email:"",password:""});
+
+    function onChangeHandler(e){
+        setForm({...form,[e.target.name]:e.target.value});
+    }
     return(
         <div className="min-h-screen flex items-center justify-center bg-white px-4">
             <div className="w-full max-w-md space-y-6 p-8 bg-white rounded-xl shadow-sm">
@@ -11,8 +16,8 @@ const LoginLayout = () => {
                 </div>
                 
                 <div className="space-y-4">
-                    <InputBoxComponent {...{InputType:"text", InputName:"Email Address"}}/>
-                    <InputBoxComponent {...{InputType:"password", InputName:"Password"}}/>
+                    <InputBoxComponent {...{InputType:"text", InputName:"email",OnChangeHandler:onChangeHandler,value:email}}/>
+                    <InputBoxComponent {...{InputType:"password", InputName:"password",OnChangeHandler:onChangeHandler,value:password}}/>
                     
                     <div className="flex justify-end">
                         <a href="#" className="text-sm text-blue-600 hover:text-blue-800">Forgot password?</a>

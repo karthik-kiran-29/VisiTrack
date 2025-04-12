@@ -1,5 +1,6 @@
 import { useState} from 'react';
 import { useNavigate } from 'react-router';
+import { useAuth } from '../Context/AuthProvider';
 
 
 // FAQ Item Component
@@ -26,7 +27,7 @@ const FAQItem = ({ question, answer }) => {
 
 // Main Landing Page Component
 const LandingPage = () => {
-  const user = true ;
+  const {user} = useAuth() ;
   const navigate = useNavigate();
   
   // If user is logged in, show a different call-to-action
