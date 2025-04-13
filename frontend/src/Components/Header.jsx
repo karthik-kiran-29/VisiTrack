@@ -3,7 +3,7 @@ import { useNavigate,Link } from "react-router";
 import { useAuth } from "../Context/AuthProvider";
 
 const Header = () => {
-    const {user} = useAuth();
+    const {user,logout} = useAuth();
     const navigate = useNavigate();
     
     const handleLogout = () => {
