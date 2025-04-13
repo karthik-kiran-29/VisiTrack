@@ -1,6 +1,6 @@
 import React from "react";
 
-const IconComponent = ({ ActionName, ActionColor, ActionID, DeleteHandler,AddHandler }) => {
+const IconComponent = ({ ActionName, ActionColor, ActionID, DeleteHandler, AddHandler }) => {
   const performRequest = async (method, endpoint, body) => {
     try {
       const response = await fetch(import.meta.env.VITE_DOMAIN_URL + endpoint, {
@@ -37,20 +37,43 @@ const IconComponent = ({ ActionName, ActionColor, ActionID, DeleteHandler,AddHan
     }
 
     if (ActionName === "Add") {
-      const name = prompt("What Should be the name of it??")
-      const {result} = await performRequest("POST", "/api/auth/key", {name:name});
-
-      AddHandler({name:result.name,_id:result._id,count:result.count})
-      
+      const name = prompt("What should be the name of your new access link?");
+      if (name) {
+        const {result} = await performRequest("POST", "/api/auth/key", {name: name});
+        
+        AddHandler({name: result.name, _id: result._id, count: result.count});
+      }
     }
   };
 
+  // Default styling for Add button
+  let buttonClasses = "px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500";
+  
+  // Add specific styling based on action type
+  if (ActionName === "Add") {
+    buttonClasses += " bg-indigo-600 text-white hover:bg-indigo-700";
+  } else if (ActionName === "Delete") {
+    buttonClasses += " bg-red-600 text-white hover:bg-red-700";
+  } else {
+    // Use provided color if specified
+    buttonClasses += ` ${ActionColor}`;
+  }
+
   return (
     <button
-      className={`${ActionColor} px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 ease-in-out shadow-sm hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500`}
+      className={buttonClasses}
       onClick={handleClick}
     >
-      {ActionName}
+      {ActionName === "Add" ? (
+        <span className="flex items-center">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+          </svg>
+          {ActionName}
+        </span>
+      ) : (
+        ActionName
+      )}
     </button>
   );
 };

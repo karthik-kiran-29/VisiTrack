@@ -14,10 +14,9 @@ const UserLinksLayout = () => {
     }
 
     const AddHandler = (NewData)=>{
-      setDatas([{...datas,NewData}])
+      setDatas([...datas,NewData])
     }
 
-    console.log(user)
     useEffect(() => {
         const fetchData = async () => {
           try {
@@ -41,22 +40,40 @@ const UserLinksLayout = () => {
         };
       
         fetchData();
-      }, []); // {user.name} in the hello,
+      }, []);
+      
     return(
         <div className="bg-gray-50 min-h-screen">
-            <div className="bg-white shadow-sm">
+            <div className="bg-white shadow">
                 <div className="max-w-5xl mx-auto px-4 py-5 sm:px-6 flex items-center justify-between">
-                    <div className="text-xl font-semibold text-gray-800">Hello, {name}</div> 
-                    <IconComponent {...{ActionName:"Add", ActionColor:"bg-blue-600 text-white"}} AddHandler={AddHandler}/>
+                    <div className="text-xl font-semibold text-gray-900">Hello, {name}</div> 
+                    <IconComponent {...{ActionName:"Add", ActionColor:"bg-indigo-600 text-white"}} AddHandler={AddHandler}/>
                 </div>
             </div>
             
-            <div className="max-w-5xl mx-auto px-4 py-6 sm:px-6">
-                <div className="space-y-3">
-                {datas.map((data) => (
-                    <LabelComponent key={data._id} {...data} DeleteHandler={DeleteHandler}/>
-                ))}
-
+            <div className="max-w-5xl mx-auto px-4 py-8 sm:px-6">
+                <h2 className="text-2xl font-bold text-gray-900 mb-6">Your Access Links</h2>
+                <div className="space-y-4">
+                    {datas.length > 0 ? (
+                        datas.map((data) => (
+                            <LabelComponent key={data._id} {...data} DeleteHandler={DeleteHandler}/>
+                        ))
+                    ) : (
+                        <div className="text-center py-12 bg-white rounded-lg shadow">
+                            <p className="text-gray-600 mb-4">You don't have any access links yet.</p>
+                            <button 
+                                onClick={() => {
+                                    const name = prompt("What should be the name of your first access link?");
+                                    if (name) {
+                                        // Call your add handler logic here
+                                    }
+                                }}
+                                className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors text-sm font-medium"
+                            >
+                                Create Your First Link
+                            </button>
+                        </div>
+                    )}
                 </div>
             </div>
         </div>
