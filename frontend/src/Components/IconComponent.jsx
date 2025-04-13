@@ -1,6 +1,6 @@
 import React from "react";
 
-const IconComponent = ({ ActionName, ActionColor, ActionID, DeleteHandler,RequestBody, AddHandler }) => {
+const IconComponent = ({ ActionName, ActionColor, ActionID, DeleteHandler,AddHandler }) => {
   const performRequest = async (method, endpoint, body) => {
     try {
       const response = await fetch(import.meta.env.VITE_DOMAIN_URL + endpoint, {
@@ -37,10 +37,11 @@ const IconComponent = ({ ActionName, ActionColor, ActionID, DeleteHandler,Reques
     }
 
     if (ActionName === "Add") {
-      // For Add operation, use POST method with appropriate endpoint
-      await performRequest("POST", "/api/auth/key", RequestBody);
-      // If you need to handle the result or update UI after adding,
-      // you could accept an AddHandler prop similar to DeleteHandler
+      const name = prompt("What Should be the name of it??")
+      const {result} = await performRequest("POST", "/api/auth/key", {name:name});
+
+      AddHandler({name:result.name,_id:result._id,count:result.count})
+      
     }
   };
 

@@ -13,6 +13,10 @@ const UserLinksLayout = () => {
         setDatas(prev => prev.filter(data => data._id !== id));
     }
 
+    const AddHandler = (NewData)=>{
+      setDatas([{...datas,NewData}])
+    }
+
     console.log(user)
     useEffect(() => {
         const fetchData = async () => {
@@ -43,7 +47,7 @@ const UserLinksLayout = () => {
             <div className="bg-white shadow-sm">
                 <div className="max-w-5xl mx-auto px-4 py-5 sm:px-6 flex items-center justify-between">
                     <div className="text-xl font-semibold text-gray-800">Hello, {name}</div> 
-                    <IconComponent {...{ActionName:"Add New Link", ActionColor:"bg-blue-600 text-white"}}/>
+                    <IconComponent {...{ActionName:"Add", ActionColor:"bg-blue-600 text-white"}} AddHandler={AddHandler}/>
                 </div>
             </div>
             
