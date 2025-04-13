@@ -2,12 +2,13 @@ import { AcessKeyModal } from "../modals/AccessKeyModal.js";
 
 const postAcessKey = async (req,res) =>{
     const {id} = req.user;
+    const {name} = req.body;
 
     if(!id){
         return res.status(401).json({status:false,message:"User Not Found"});
     }
     try {
-        const result = await AcessKeyModal.create({userid:id,count:0});
+        const result = await AcessKeyModal.create({userid:id,count:0,name});
         return res.json({status:true,result});
     } catch (error) {
         return res.status(500).json({status:false,message:error.message});
