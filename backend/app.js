@@ -7,7 +7,10 @@ import cookieParser from 'cookie-parser';
 import AuthMiddleware from './middleware/AuthMiddleware.js';
 import AcessKeyRouter from './routes/AcessKeyRoute.js';
 import VisitorRouter from './routes/VisitorRoute.js';
+import cors from 'cors';
 
+app.use(cors({origin: "http://localhost:5173", // 👈 must match frontend
+    credentials: true }));
 app.use(cookieParser());
 app.use(express.json());
 dotenv.config()
