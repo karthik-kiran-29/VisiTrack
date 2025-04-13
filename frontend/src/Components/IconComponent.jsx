@@ -1,41 +1,46 @@
 import React from "react";
 
-const IconComponent = ({ ActionName, ActionColor, ActionID,DeleteHandler }) => {
-  const DeleteLink = async (ActionID) => {
+const IconComponent = ({ ActionName, ActionColor, ActionID, DeleteHandler,RequestBody, AddHandler }) => {
+  const performRequest = async (method, endpoint, body) => {
     try {
-      const response = await fetch(import.meta.env.VITE_DOMAIN_URL + "/api/auth/key", {
-        method: "DELETE",
+      const response = await fetch(import.meta.env.VITE_DOMAIN_URL + endpoint, {
+        method,
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify({ keyid: ActionID }),
+        body: JSON.stringify(body),
         credentials: "include"
       });
 
       if (!response.ok) {
         const errorData = await response.json();
-        console.error("Operation failed:", errorData.message);
-        return;
+        console.error(`Operation failed: ${errorData.message}`);
+        return null;
       }
 
       const json = await response.json();
-      console.log("Deleted:", json);
+      console.log(`${method} operation successful:`, json);
+      return json;
     } catch (error) {
-      console.error("Cannot Delete Now", error);
+      console.error(`Cannot perform ${method} operation:`, error);
+      return null;
     }
   };
 
-  const UpdateLink = async (ActionID) => {
-    console.log("Update clicked for ID:", ActionID);
-    // Add your update logic here
-  };
+  const handleClick = async () => {
+    if (ActionName === "Delete" && ActionID) {
+      const body = { keyID: ActionID };
+      const result = await performRequest("DELETE", "/api/auth/key", body);
+      if (result && DeleteHandler) {
+        DeleteHandler(ActionID);
+      }
+    }
 
-  const handleClick = () => {
-    if (ActionName === "Delete") {
-      DeleteLink(ActionID);
-      DeleteHandler(ActionID)
-    } else {
-      UpdateLink(ActionID);
+    if (ActionName === "Add") {
+      // For Add operation, use POST method with appropriate endpoint
+      await performRequest("POST", "/api/auth/key", RequestBody);
+      // If you need to handle the result or update UI after adding,
+      // you could accept an AddHandler prop similar to DeleteHandler
     }
   };
 
