@@ -39,9 +39,23 @@ const IconComponent = ({ ActionName, ActionColor, ActionID, DeleteHandler, AddHa
     if (ActionName === "Add") {
       const name = prompt("What should be the name of your new access link?");
       if (name) {
-        const {result} = await performRequest("POST", "/api/auth/key", {name: name});
+        const result = await performRequest("POST", "/api/auth/key", {name: name});
         
-        AddHandler({name: result.name, _id: result._id, count: result.count});
+        // Check if result exists and contains the expected data
+        if (result && result.result) {
+          AddHandler({
+            name: result.result.name, 
+            _id: result.result._id, 
+            count: result.result.count
+          });
+        } else if (result) {
+          // Fallback if the response structure is different
+          AddHandler({
+            name: result.name || name, 
+            _id: result._id, 
+            count: result.count || 0
+          });
+        }
       }
     }
   };
