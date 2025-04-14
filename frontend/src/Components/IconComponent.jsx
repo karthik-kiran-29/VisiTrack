@@ -29,7 +29,7 @@ const IconComponent = ({ ActionName, ActionColor, ActionID, DeleteHandler, AddHa
 
   const handleClick = async () => {
     if (ActionName === "Delete" && ActionID) {
-      const body = { keyID: ActionID };
+      const body = { keyid: ActionID };
       const result = await performRequest("DELETE", "/api/auth/key", body);
       if (result && DeleteHandler) {
         DeleteHandler(ActionID);
