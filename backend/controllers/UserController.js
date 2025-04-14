@@ -22,7 +22,7 @@ const SignUp = async (req, res) => {
 
         res.cookie('token',token, {
             withCredentials: true,
-            httpOnly: false,
+            httpOnly: true,
             secure: true, // Required for HTTPS
             sameSite: 'none', // Required for cross-domain
             maxAge: 24 * 60 * 60 * 1000, // 24 hours
@@ -55,7 +55,7 @@ const SignIn = async (req, res) => {
 
             res.cookie('token',token, {
                 withCredentials: true,
-                httpOnly: false,
+                httpOnly: true,
                 secure: true, // Required for HTTPS
                 sameSite: 'none', // Required for cross-domain
                 maxAge: 24 * 60 * 60 * 1000, // 24 hours
