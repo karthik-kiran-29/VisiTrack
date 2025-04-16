@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
+import LoadingSpinner from './LoadingSpinner';
 
 const ProtectedRoute = ({ children }) => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -25,7 +26,7 @@ const ProtectedRoute = ({ children }) => {
     
     // Show nothing while checking authentication
     if (isLoading) {
-        return null; // Or return a loading spinner/component
+        return <LoadingSpinner/>; // Or return a loading spinner/component
     }
     
     // Render children only if authenticated

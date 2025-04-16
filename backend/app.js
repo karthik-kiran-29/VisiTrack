@@ -9,11 +9,12 @@ import AcessKeyRouter from './routes/AcessKeyRoute.js';
 import VisitorRouter from './routes/VisitorRoute.js';
 import cors from 'cors';
 
+dotenv.config()
+
 app.use(cors({origin: process.env.FRONTEND_URL, // 👈 must match frontend
     credentials: true }));
 app.use(cookieParser());
 app.use(express.json());
-dotenv.config()
 
 connectDB();
 app.use("/api",VisitorRouter);
