@@ -1,16 +1,35 @@
-import React from 'react';
-import { Navigate, useNavigate } from 'react-router';
-import { useAuth } from '../Context/AuthProvider';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const ProtectedRoute = ({ children }) => {
-    const {user} = useAuth();
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
     const navigate = useNavigate();
-
-    if (user===null) {
-        navigate("/login")
+    
+    useEffect(() => {
+        // Function to check if token cookie exists
+        const checkTokenCookie = () => {
+            const cookies = document.cookie.split(';');
+            const tokenCookie = cookies.find(cookie => cookie.trim().startsWith('token='));
+            
+            if (tokenCookie) {
+                setIsAuthenticated(true);
+            } else {
+                navigate("/login", { replace: true });
+            }
+            setIsLoading(false);
+        };
+        
+        checkTokenCookie();
+    }, [navigate]);
+    
+    // Show nothing while checking authentication
+    if (isLoading) {
+        return null; // Or return a loading spinner/component
     }
-
-    return children;
+    
+    // Render children only if authenticated
+    return isAuthenticated ? children : null;
 };
 
 export default ProtectedRoute;
