@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import InputBoxComponent from "../Components/InputBoxComponent";
 import { useAuth } from "../Context/AuthProvider";
+import Toaster from "../Components/Toaster"; // Import the Toaster component
 
 const LoginLayout = () => {
   const { login } = useAuth();
@@ -9,10 +10,22 @@ const LoginLayout = () => {
     email: "",
     password: ""
   });
+  
+  // State for toast notifications
+  const [toast, setToast] = useState({
+    show: false,
+    message: "",
+    color: "green"
+  });
 
   function onChangeHandler(e) {
     setForm({ ...form, [e.target.name]: e.target.value });
   }
+
+  // Clear toast function
+  const clearToast = () => {
+    setToast({ ...toast, show: false });
+  };
 
   const submitHandler = async () => {
     try {
@@ -33,7 +46,12 @@ const LoginLayout = () => {
 
       if (!response.ok) {
         const errorData = await response.json();
-        console.error("Login failed:", errorData.message);
+        // Show error toast instead of console.error
+        setToast({
+          show: true,
+          message: `Login failed: ${errorData.message}`,
+          color: "red"
+        });
         return;
       }
 
@@ -41,9 +59,19 @@ const LoginLayout = () => {
       
       login({ email: json.result.email, name: json.result.name });
 
-      console.log("Login successful:", json);
+      // Show success toast instead of console.log
+      setToast({
+        show: true,
+        message: "Login successful!",
+        color: "green"
+      });
     } catch (error) {
-      console.error("Error during login:", error);
+      // Show error toast instead of console.error
+      setToast({
+        show: true,
+        message: `Error during login: ${error.message}`,
+        color: "red"
+      });
     }
   };
 
@@ -51,6 +79,15 @@ const LoginLayout = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-white px-4">
+      {/* Show the Toaster component conditionally */}
+      {toast.show && (
+        <Toaster 
+          message={toast.message} 
+          color={toast.color} 
+          onClose={clearToast}
+        />
+      )}
+      
       <div className="w-full max-w-md space-y-6 p-8 bg-white rounded-xl shadow-sm">
         <div className="text-center mb-8">
           <h2 className="text-2xl font-semibold text-gray-800 mb-2">Welcome back</h2>
